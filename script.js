@@ -24,7 +24,7 @@ const noMessages = [
 ];
 let noCount = 0;
 const isLocalFile = window.location.protocol === 'file:';
-const invitationUrl = isLocalFile ? 'https://invitation.page' : window.location.href;
+const invitationUrl = isLocalFile ? 'https://invitation.page' : (window.location.origin + window.location.pathname).replace(/#.*$/, '').replace(/\?.*$/, '');
 
 function openInvitation(){
 
