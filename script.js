@@ -12,6 +12,8 @@ const qrImage = document.getElementById('qrImage');
 const shareUrl = document.getElementById('shareUrl');
 const buttonArea = document.querySelector('.button-area');
 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiEY3fn-Ab_ndv4UPRwE6iYQbeOJlr-cejiLjoyXxiNq8W5w40q1MzZTTM5bzJ90YJ/exec';
+
 const noMessages = [
   'NO 😅',
   'Are you sure? 🤔',
@@ -58,6 +60,16 @@ function confirmYes(){
   success.style.display = 'block';
   yesBtn.textContent = 'THANK YOU ❤️';
   launchConfetti();
+
+  // Send RSVP to Google Sheets
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      name: name,
+      guests: guestText,
+      response: 'YES'
+    })
+  }).catch(err => console.log('RSVP logged (offline or error)', err));
 }
 
 function shareInvitation(){
