@@ -19,15 +19,9 @@ jobs:
           cp -R images public/
 
       - name: Deploy to GitHub Pages
-        env:
-          PAGES_REPO: ${{ github.repository }}
-          PAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd public
-          git init
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote add origin https://x-access-token:${PAGES_TOKEN}@github.com/${PAGES_REPO}.git
-          git add .
-          git commit -m "Deploy to gh-pages"
-          git push --force origin HEAD:gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: public
+          branch: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+          clean: true
