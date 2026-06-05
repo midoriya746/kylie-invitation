@@ -77,13 +77,13 @@ function shareInvitation(){
 function updateQrImage(){
   if (isLocalFile) {
     const message = encodeURIComponent('Publish this invitation online first to generate a working QR code.');
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${message}`;
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${message}&t=${Date.now()}`;
     shareUrl.textContent = 'Publish online to generate a working QR link.';
     return;
   }
 
   const encoded = encodeURIComponent(invitationUrl);
-  qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encoded}`;
+  qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encoded}&t=${Date.now()}`;
   shareUrl.textContent = invitationUrl;
 }
 
