@@ -62,13 +62,18 @@ function confirmYes(){
   launchConfetti();
 
   // Send RSVP to Google Sheets
+  const payload = new URLSearchParams();
+  payload.append('name', name);
+  payload.append('guests', guestText);
+  payload.append('response', 'YES');
+
   fetch(GOOGLE_SCRIPT_URL, {
     method: 'POST',
-    body: JSON.stringify({
-      name: name,
-      guests: guestText,
-      response: 'YES'
-    })
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
+    body: payload.toString()
   }).catch(err => console.log('RSVP logged (offline or error)', err));
 }
 
