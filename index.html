@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tess 70th Birthday Invitation</title>
+  <title>You're invited to Kylie's 7th Birthday Celebration!</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,10 +25,10 @@
     <section class="hero">
       <div class="hero-overlay"></div>
       <div class="hero-copy">
-        <span class="small-title">WE WOULD LIKE TO INVITE YOU TO</span>
-        <h1 class="name-title">Tess' 70th Birthday Celebration</h1>
-        <p class="hero-subtitle">June 27 • 2:00 PM</p>
-        <p class="hero-location">Kenny Rogers • Doña Soledad Ave. • Don Bosco, Parañaque City</p>
+        <span class="small-title">YOU'RE INVITED TO A MAGICAL DAY</span>
+        <h1 class="name-title">Kylie's 7th Birthday Celebration!</h1>
+        <p class="hero-subtitle">A sweet birthday party full of sparkles, smiles, and fun</p>
+        <p class="hero-location">Bring your brightest smile and celebrate with Kylie</p>
       </div>
     </section>
 
@@ -36,24 +36,24 @@
       <div class="card-heading">
         <div>
           <p class="card-label">Dress Code</p>
-          <p class="card-value">Casual • 🤍 🩷 🧡 🤎</p>
+          <p class="card-value">Pretty pinks • lilac • peach • white</p>
         </div>
-        <div class="card-number">70</div>
+        <div class="card-number">7</div>
       </div>
 
       <div class="info-grid">
         <div class="box">
           <h3>When</h3>
-          <p>Thursday, June 27 at 2:00 PM</p>
+          <p>June 27 • 2:00 PM</p>
         </div>
         <div class="box">
           <h3>Where</h3>
-          <p>Kenny Rogers, Doña Soledad Ave., Don Bosco, Parañaque City</p>
+          <p>Birthday venue details can be added here</p>
         </div>
       </div>
 
-      <form class="form" onsubmit="return false;">
-        <input id="guestName" type="text" placeholder="Your name" aria-label="Guest name">
+      <form class="form" id="rsvpForm" novalidate>
+        <input id="guestName" type="text" placeholder="Your name" aria-label="Guest name" required autocomplete="name">
         <select id="guestCount" aria-label="Number of guests">
           <option value="1 Guest">1 Guest</option>
           <option value="2 Guests">2 Guests</option>
@@ -65,18 +65,19 @@
         <p class="question">Will you attend?</p>
 
         <div class="button-area">
-          <button id="yesBtn" type="button">YES ❤️</button>
+          <button id="yesBtn" type="submit" disabled>YES ❤️</button>
           <button id="noBtn" type="button">NO 😅</button>
         </div>
 
         <div class="actions-bar">
           <button id="shareBtn" type="button">📩 Share Invitation</button>
+          <button id="downloadRsvpBtn" type="button">⬇ RSVP Backup</button>
         </div>
 
         <div class="qr-section">
           <p class="qr-title">Invitation</p>
           <img id="qrImage" alt="QR code for invitation">
-          <p class="qr-note">Scan or share this link:<br><span id="shareUrl">Birthday Invitation</span></p>
+          <p class="qr-note">Scan or share this link:<br><span id="shareUrl">Kylie's Birthday Invitation</span></p>
         </div>
 
         <div id="success" class="success">
@@ -90,6 +91,6 @@
   </main>
 
   <div id="confettiLayer"></div>
-  <script src="script.js"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>

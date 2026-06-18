@@ -1,9 +1,9 @@
-Tess 70th Birthday — GitHub Pages Deployment
+Kylie's 7th Birthday — GitHub Pages Deployment
 ===========================================
 
 Instructions to publish this invitation on GitHub Pages (static site):
 
-1) Create a new repository on GitHub (e.g., `tess-70-invitation`).
+1) Create a new repository on GitHub (e.g., `kylie-7-invitation`).
 
 2) From your local project folder run these commands in a terminal:
 
@@ -27,5 +27,6 @@ Notes
 - If you prefer a custom domain, add a `CNAME` file with your domain in the project root before pushing.
 - If you name the repository `USERNAME.github.io` and push to `main`, your site will be available at `https://USERNAME.github.io/`.
 - The QR generator and share button will use the repository URL once the site is published.
+- RSVP responses also keep a local backup in the browser so the host can export a CSV if the Google Sheets link is unavailable.
 
 Need help pushing or want me to generate a `CNAME` or branch strategy? Tell me your GitHub username and repo name and I can generate exact commands.

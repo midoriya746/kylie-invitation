@@ -10,9 +10,13 @@ const guestName = document.getElementById('guestName');
 const guestCount = document.getElementById('guestCount');
 const qrImage = document.getElementById('qrImage');
 const shareUrl = document.getElementById('shareUrl');
+const rsvpForm = document.getElementById('rsvpForm');
+const downloadRsvpBtn = document.getElementById('downloadRsvpBtn');
 const buttonArea = document.querySelector('.button-area');
+console.log('script.js loaded');
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiEY3fn-Ab_ndv4UPRwE6iYQbeOJlr-cejiLjoyXxiNq8W5w40q1MzZTTM5bzJ90YJ/exec';
+const RSVP_BACKUP_KEY = 'kylie7-rsvp-backup';
 
 const noMessages = [
   'NO 😅',
@@ -20,7 +24,7 @@ const noMessages = [
   'Really? 🥺',
   'Think again 😭',
   'But there will be cake 🍰',
-  'Lola Tess is waiting ❤️',
+  'Kylie is waiting ❤️',
   'Please come 🥹',
   'Last chance 😭'
 ];
@@ -36,6 +40,7 @@ function openInvitation(){
     envelopeScreen.style.display = 'none';
     invitationContent.style.display = 'block';
     updateQrImage();
+    updateYesButtonState();
   }, 1000);
 }
 
@@ -52,36 +57,99 @@ function moveButton(){
   }
 }
 
-function confirmYes(){
-  const name = guestName.value.trim() || 'Guest';
+function updateYesButtonState(){
+  yesBtn.disabled = !guestName.value.trim();
+}
+
+function loadRsvpBackup(){
+  try {
+    return JSON.parse(localStorage.getItem(RSVP_BACKUP_KEY) || '[]');
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveRsvpBackup(entry){
+  const items = loadRsvpBackup();
+  items.push(entry);
+  localStorage.setItem(RSVP_BACKUP_KEY, JSON.stringify(items));
+}
+
+function downloadRsvpBackup(){
+  const items = loadRsvpBackup();
+  if (!items.length) {
+    alert('No RSVP backup has been saved in this browser yet.');
+    return;
+  }
+
+  const csvRows = ['Name,Guests,Response,Time'];
+  items.forEach(item => {
+    const safeName = String(item.name || '').replace(/"/g, '""');
+    const safeGuests = String(item.guests || '').replace(/"/g, '""');
+    const safeResponse = String(item.response || '').replace(/"/g, '""');
+    const safeTime = String(item.time || '').replace(/"/g, '""');
+    csvRows.push(`"${safeName}","${safeGuests}","${safeResponse}","${safeTime}"`);
+  });
+
+  const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'kylie-rsvp-backup.csv';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function confirmYes(event){
+  if (event) {
+    event.preventDefault();
+  }
+
+  const name = guestName.value.trim();
+  if (!name) {
+    guestName.focus();
+    alert('Please enter your name before confirming your RSVP.');
+    return;
+  }
+
   const guestText = guestCount.value || '1 Guest';
   person.textContent = name;
   seats.textContent = guestText;
   success.style.display = 'block';
   yesBtn.textContent = 'THANK YOU ❤️';
+  yesBtn.disabled = true;
   launchConfetti();
 
-  // Send RSVP to Google Sheets
+  saveRsvpBackup({
+    name,
+    guests: guestText,
+    response: 'YES',
+    time: new Date().toLocaleString()
+  });
+
   const payload = new URLSearchParams();
   payload.append('name', name);
   payload.append('guests', guestText);
   payload.append('response', 'YES');
 
+  console.log('RSVP sending', { name, guestText, url: GOOGLE_SCRIPT_URL });
+
   fetch(GOOGLE_SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    },
     body: payload.toString()
-  }).catch(err => console.log('RSVP logged (offline or error)', err));
+  })
+  .then(() => console.log('RSVP sent to Apps Script via POST'))
+  .catch(err => console.warn('RSVP send failed', err));
 }
 
 function shareInvitation(){
-  const shareText = "You're invited to Tess' 70th Birthday Celebration! ❤️";
+  const shareText = "You're invited to Kylie's 7th Birthday Celebration! 💖";
   if (navigator.share){
     navigator.share({
-      title:'Tess 70th Birthday Invitation',
+      title:"You're invited to Kylie's 7th Birthday Celebration!",
       text: shareText,
       url: invitationUrl,
     }).catch(()=>{});
@@ -129,6 +197,17 @@ noBtn.addEventListener('mouseenter', moveButton);
 noBtn.addEventListener('click', moveButton);
 noBtn.addEventListener('touchstart', moveButton);
 yesBtn.addEventListener('click', confirmYes);
+if (rsvpForm) {
+  rsvpForm.addEventListener('submit', confirmYes);
+}
 shareBtn.addEventListener('click', shareInvitation);
+guestName.addEventListener('input', updateYesButtonState);
+guestName.addEventListener('keydown', updateYesButtonState);
 
+guestName.addEventListener('change', updateYesButtonState);
+if (downloadRsvpBtn) {
+  downloadRsvpBtn.addEventListener('click', downloadRsvpBackup);
+}
+
+updateYesButtonState();
 updateQrImage();
