@@ -103,36 +103,67 @@ function downloadRsvpBackup(){
 }
 
 function confirmYes(event){
-  if (event) {
-    event.preventDefault();
-  }
+if (event) {
+event.preventDefault();
+}
 
-  const payload = new URLSearchParams();
+const name = guestName.value.trim();
 
+if (!name) {
+guestName.focus();
+alert('Please enter your name before confirming your RSVP.');
+return;
+}
+
+const guestText = guestCount.value || '1 Guest';
+
+// Update confirmation UI
+person.textContent = name;
+seats.textContent = guestText;
+success.style.display = 'block';
+yesBtn.textContent = 'THANK YOU ❤️';
+yesBtn.disabled = true;
+
+// Confetti
+launchConfetti();
+
+// Save local backup
+saveRsvpBackup({
+name: name,
+guests: guestText,
+response: 'YES',
+time: new Date().toLocaleString()
+});
+
+// Prepare data for Google Apps Script
+const payload = new URLSearchParams();
 payload.append('name', name);
 payload.append('guests', guestText);
 payload.append('response', 'YES');
 
-console.log('Sending RSVP:', {
-name,
+console.log('Sending RSVP', {
+name: name,
 guests: guestText,
 response: 'YES'
 });
 
+// Send to Google Sheets
 fetch(GOOGLE_SCRIPT_URL, {
 method: 'POST',
+mode: 'no-cors',
 headers: {
 'Content-Type': 'application/x-www-form-urlencoded'
 },
 body: payload.toString()
 })
-.then(res => res.text())
-.then(data => {
-console.log('Apps Script Response:', data);
+.then(() => {
+console.log('RSVP successfully sent');
 })
-.catch(err => {
-console.error('Apps Script Error:', err);
+.catch(error => {
+console.error('RSVP submission failed:', error);
 });
+}
+
 
 function shareInvitation(){
   const shareText = "You're invited to Kylie's 7th Birthday Celebration! 💖";
