@@ -107,43 +107,32 @@ function confirmYes(event){
     event.preventDefault();
   }
 
-  const name = guestName.value.trim();
-  if (!name) {
-    guestName.focus();
-    alert('Please enter your name before confirming your RSVP.');
-    return;
-  }
-
-  const guestText = guestCount.value || '1 Guest';
-  person.textContent = name;
-  seats.textContent = guestText;
-  success.style.display = 'block';
-  yesBtn.textContent = 'THANK YOU ❤️';
-  yesBtn.disabled = true;
-  launchConfetti();
-
-  saveRsvpBackup({
-    name,
-    guests: guestText,
-    response: 'YES',
-    time: new Date().toLocaleString()
-  });
-
   const payload = new URLSearchParams();
-  payload.append('name', name);
-  payload.append('guests', guestText);
-  payload.append('response', 'YES');
 
-  console.log('RSVP sending', { name, guestText, url: GOOGLE_SCRIPT_URL });
+payload.append('name', name);
+payload.append('guests', guestText);
+payload.append('response', 'YES');
 
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: payload.toString()
-  })
-  .then(() => console.log('RSVP sent to Apps Script via POST'))
-  .catch(err => console.warn('RSVP send failed', err));
-}
+console.log('Sending RSVP:', {
+name,
+guests: guestText,
+response: 'YES'
+});
+
+fetch(GOOGLE_SCRIPT_URL, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+},
+body: payload.toString()
+})
+.then(res => res.text())
+.then(data => {
+console.log('Apps Script Response:', data);
+})
+.catch(err => {
+console.error('Apps Script Error:', err);
+});
 
 function shareInvitation(){
   const shareText = "You're invited to Kylie's 7th Birthday Celebration! 💖";
