@@ -103,67 +103,47 @@ function downloadRsvpBackup(){
 }
 
 function confirmYes(event){
-if (event) {
-event.preventDefault();
+  if (event) {
+    event.preventDefault();
+  }
+
+  const name = guestName.value.trim();
+  if (!name) {
+    guestName.focus();
+    alert('Please enter your name before confirming your RSVP.');
+    return;
+  }
+
+  const guestText = guestCount.value || '1 Guest';
+  person.textContent = name;
+  seats.textContent = guestText;
+  success.style.display = 'block';
+  yesBtn.textContent = 'THANK YOU ❤️';
+  yesBtn.disabled = true;
+  launchConfetti();
+
+  saveRsvpBackup({
+    name,
+    guests: guestText,
+    response: 'YES',
+    time: new Date().toLocaleString()
+  });
+
+  const payload = new URLSearchParams();
+  payload.append('name', name);
+  payload.append('guests', guestText);
+  payload.append('response', 'YES');
+
+  console.log('RSVP sending', { name, guestText, url: GOOGLE_SCRIPT_URL });
+
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: payload.toString()
+  })
+  .then(() => console.log('RSVP sent to Apps Script via POST'))
+  .catch(err => console.warn('RSVP send failed', err));
 }
-
-const name = guestName.value.trim();
-
-if (!name) {
-guestName.focus();
-alert('Please enter your name before confirming your RSVP.');
-return;
-}
-
-const guestText = guestCount.value || '1 Guest';
-
-// Update confirmation UI
-person.textContent = name;
-seats.textContent = guestText;
-success.style.display = 'block';
-yesBtn.textContent = 'THANK YOU ❤️';
-yesBtn.disabled = true;
-
-// Confetti
-launchConfetti();
-
-// Save local backup
-saveRsvpBackup({
-name: name,
-guests: guestText,
-response: 'YES',
-time: new Date().toLocaleString()
-});
-
-// Prepare data for Google Apps Script
-const payload = new URLSearchParams();
-payload.append('name', name);
-payload.append('guests', guestText);
-payload.append('response', 'YES');
-
-console.log('Sending RSVP', {
-name: name,
-guests: guestText,
-response: 'YES'
-});
-
-// Send to Google Sheets
-fetch(GOOGLE_SCRIPT_URL, {
-method: 'POST',
-mode: 'no-cors',
-headers: {
-'Content-Type': 'application/x-www-form-urlencoded'
-},
-body: payload.toString()
-})
-.then(() => {
-console.log('RSVP successfully sent');
-})
-.catch(error => {
-console.error('RSVP submission failed:', error);
-});
-}
-
 
 function shareInvitation(){
   const shareText = "You're invited to Kylie's 7th Birthday Celebration! 💖";
