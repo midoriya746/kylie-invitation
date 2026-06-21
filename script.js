@@ -212,14 +212,14 @@ yesBtn.addEventListener('click', confirmYes);
 if (rsvpForm) {
   rsvpForm.addEventListener('submit', confirmYes);
 }
-shareBtn.addEventListener('click', shareInvitation);
+/* shareBtn.addEventListener('click', shareInvitation); */
 guestName.addEventListener('input', updateYesButtonState);
 guestName.addEventListener('keydown', updateYesButtonState);
 
 guestName.addEventListener('change', updateYesButtonState);
-if (downloadRsvpBtn) {
-  downloadRsvpBtn.addEventListener('click', downloadRsvpBackup);
-}
+/*if (downloadRsvpBtn) {
+  downloadRsvpBtn.addEventListener('click', downloadRsvpBackup);*/
+/*}*/
 
 updateYesButtonState();
 updateQrImage();
