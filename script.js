@@ -169,7 +169,19 @@ function updateQrImage(){
 
   const encoded = encodeURIComponent(invitationUrl);
   qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encoded}&t=${Date.now()}`;
-  shareUrl.textContent = invitationUrl;
+  shareUrl.innerHTML = `
+  <a href="${invitationUrl}"
+     target="_blank"
+     rel="noopener noreferrer"
+     style="
+        text-decoration: none;
+        color: #7b2cbf;
+        font-weight: 600;
+        font-size: 16px;
+     ">
+     💌 You're Invited — Click Here to Open the Invitation
+  </a>
+`;
 }
 
 function launchConfetti(){
