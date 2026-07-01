@@ -58,12 +58,13 @@
         </div>
       </div>
 
-      <form class="form" id="rsvpForm" novalidate>
-        <input id="guestName" type="text" placeholder="Your name" aria-label="Guest name" required autocomplete="name">
-        <select id="guestCount" aria-label="Number of guests">
+      <form class="form" id="rsvpForm" novalidate action="https://script.google.com/macros/s/AKfycbwiEY3fn-Ab_ndv4UPRwE6iYQbeOJlr-cejiLjoyXxiNq8W5w40q1MzZTTM5bzJ90YJ/exec" target="submitFrame" method="post">
+        <input id="guestName" name="name" type="text" placeholder="Your name" aria-label="Guest name" required autocomplete="name">
+        <select id="guestCount" name="guests" aria-label="Number of guests">
           <option value="1 Guest">1 Guest</option>
           <option value="2 Guests">2 Guests</option>
         </select>
+        <input type="hidden" name="response" value="YES">
 
         <p class="question">Will you attend?</p>
 
@@ -72,9 +73,7 @@
           <button id="noBtn" type="button">NO 😅</button>
         </div>
 
-        <div class="actions-bar">
-          <button id="downloadRsvpBtn" type="button">⬇ Download guest list</button>
-        </div>
+        <div class="response-summary" id="responseSummary">No RSVPs yet</div>
 
         <div class="qr-section">
           <!--<p class="qr-title">Invitation</p>
@@ -93,6 +92,7 @@
   </main>
 
   <div id="confettiLayer"></div>
+  <iframe name="submitFrame" style="display:none;"></iframe>
   <script src="script.js?v=4"></script>
 </body>
 </html>

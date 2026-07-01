@@ -12,8 +12,9 @@ const guestCount = document.getElementById('guestCount');
 const qrImage = document.getElementById('qrImage');
 const shareUrl = document.getElementById('shareUrl');
 const rsvpForm = document.getElementById('rsvpForm');
-const downloadRsvpBtn = document.getElementById('downloadRsvpBtn');
 const buttonArea = document.querySelector('.button-area');
+const responseSummary = document.getElementById('responseSummary');
+let hasSubmitted = false;
 console.log('script.js loaded');
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiEY3fn-Ab_ndv4UPRwE6iYQbeOJlr-cejiLjoyXxiNq8W5w40q1MzZTTM5bzJ90YJ/exec';
@@ -74,52 +75,58 @@ function loadRsvpBackup(){
 
 function saveRsvpBackup(entry){
   const items = loadRsvpBackup();
+  const normalized = entry.name.trim().toLowerCase();
+  if (items.some(item => item.name.trim().toLowerCase() === normalized)) {
+    return false;
+  }
   items.push(entry);
   localStorage.setItem(RSVP_BACKUP_KEY, JSON.stringify(items));
+  return true;
 }
 
-function downloadRsvpBackup(auto = false){
+function updateResponseSummary(){
   const items = loadRsvpBackup();
-  if (!items.length) {
-    if (!auto) {
-      alert('No RSVP backup has been saved in this browser yet.');
+  const yesCount = items.filter(item => item.response === 'YES').length;
+  responseSummary.textContent = yesCount
+    ? `Confirmed guests: ${yesCount}`
+    : 'No RSVPs yet';
+}
+
+function confirmYes(event){
+  if (hasSubmitted) {
+    if (event && event.preventDefault) {
+      event.preventDefault();
     }
     return;
   }
 
-  const csvRows = ['Name,Guests,Response,Time'];
-  items.forEach(item => {
-    const safeName = String(item.name || '').replace(/"/g, '""');
-    const safeGuests = String(item.guests || '').replace(/"/g, '""');
-    const safeResponse = String(item.response || '').replace(/"/g, '""');
-    const safeTime = String(item.time || '').replace(/"/g, '""');
-    csvRows.push(`"${safeName}","${safeGuests}","${safeResponse}","${safeTime}"`);
-  });
-
-  const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'kylie-rsvp-backup.csv';
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-}
-
-function confirmYes(event){
-  if (event) {
-    event.preventDefault();
-  }
-
   const name = guestName.value.trim();
   if (!name) {
+    if (event && event.preventDefault) {
+      event.preventDefault();
+    }
     guestName.focus();
     alert('Please enter your name before confirming your RSVP.');
     return;
   }
 
   const guestText = guestCount.value || '1 Guest';
+
+  const saved = saveRsvpBackup({
+    name,
+    guests: guestText,
+    response: 'YES',
+    time: new Date().toLocaleString()
+  });
+
+  if (!saved) {
+    if (event && event.preventDefault) {
+      event.preventDefault();
+    }
+    alert('This name has already RSVP-ed. Thank you!');
+    return;
+  }
+
   person.textContent = name;
   seats.textContent = guestText;
   success.style.display = 'block';
@@ -127,29 +134,8 @@ function confirmYes(event){
   yesBtn.disabled = true;
   launchConfetti();
 
-  saveRsvpBackup({
-    name,
-    guests: guestText,
-    response: 'YES',
-    time: new Date().toLocaleString()
-  });
-
-  downloadRsvpBackup(true);
-
-  const payload = new URLSearchParams();
-  payload.append('name', name);
-  payload.append('guests', guestText);
-  payload.append('response', 'YES');
-
-  console.log('RSVP sending', { name, guestText, url: GOOGLE_SCRIPT_URL });
-
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: payload.toString()
-  })
-  .then(() => console.log('RSVP sent to Apps Script via POST'))
-  .catch(err => console.warn('RSVP send failed', err));
+  updateResponseSummary();
+  hasSubmitted = true;
 }
 
 function shareInvitation(){
@@ -168,27 +154,35 @@ function shareInvitation(){
 
 function updateQrImage(){
   if (isLocalFile) {
-    const message = encodeURIComponent('Publish this invitation online first to generate a working QR code.');
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${message}&t=${Date.now()}`;
-    shareUrl.textContent = "💌 You're Invited — Open the invitation to view details.";
+    if (qrImage) {
+      const message = encodeURIComponent('Publish this invitation online first to generate a working QR code.');
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${message}&t=${Date.now()}`;
+    }
+    if (shareUrl) {
+      shareUrl.textContent = "💌 You're Invited — Open the invitation to view details.";
+    }
     return;
   }
 
   const encoded = encodeURIComponent(invitationUrl);
-  qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encoded}&t=${Date.now()}`;
-  shareUrl.innerHTML = `
-  <a href="${invitationUrl}"
-     target="_blank"
-     rel="noopener noreferrer"
-     style="
-        text-decoration: none;
-        color: #7b2cbf;
-        font-weight: 600;
-        font-size: 16px;
-     ">
-     💌 You're Invited — Click Here to Open the Invitation
-  </a>
-`;
+  if (qrImage) {
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encoded}&t=${Date.now()}`;
+  }
+  if (shareUrl) {
+    shareUrl.innerHTML = `
+    <a href="${invitationUrl}"
+       target="_blank"
+       rel="noopener noreferrer"
+       style="
+          text-decoration: none;
+          color: #7b2cbf;
+          font-weight: 600;
+          font-size: 16px;
+       ">
+       💌 You're Invited — Click Here to Open the Invitation
+    </a>
+  `;
+  }
 }
 
 function launchConfetti(){
@@ -215,7 +209,6 @@ function launchConfetti(){
 noBtn.addEventListener('mouseenter', moveButton);
 noBtn.addEventListener('click', moveButton);
 noBtn.addEventListener('touchstart', moveButton);
-yesBtn.addEventListener('click', confirmYes);
 if (rsvpForm) {
   rsvpForm.addEventListener('submit', confirmYes);
 }
@@ -228,13 +221,16 @@ if (envelopeBtn) {
   envelopeBtn.addEventListener('click', openInvitation);
 }
 
-if (downloadRsvpBtn) {
-  downloadRsvpBtn.addEventListener('click', () => downloadRsvpBackup(false));
-}
-
 updateYesButtonState();
+if (responseSummary) {
+  updateResponseSummary();
+}
 if (isLocalFile) {
   const message = encodeURIComponent('Publish this invitation online first to generate a working QR code.');
-  qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${message}&t=${Date.now()}`;
-  shareUrl.textContent = "💌 You're Invited — Open the invitation to view details.";
+  if (qrImage) {
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${message}&t=${Date.now()}`;
+  }
+  if (shareUrl) {
+    shareUrl.textContent = "💌 You're Invited — Open the invitation to view details.";
+  }
 }
