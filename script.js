@@ -237,5 +237,4 @@ if (isLocalFile) {
   const message = encodeURIComponent('Publish this invitation online first to generate a working QR code.');
   qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${message}&t=${Date.now()}`;
   shareUrl.textContent = "💌 You're Invited — Open the invitation to view details.";
-  return;
 }
