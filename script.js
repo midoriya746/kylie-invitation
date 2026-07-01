@@ -1,5 +1,6 @@
 const envelopeScreen = document.getElementById('envelopeScreen');
 const invitationContent = document.getElementById('invitationContent');
+const envelopeBtn = document.getElementById('envelopeBtn');
 const noBtn = document.getElementById('noBtn');
 const yesBtn = document.getElementById('yesBtn');
 const shareBtn = document.getElementById('shareBtn');
@@ -44,6 +45,8 @@ function openInvitation(){
   }, 1000);
 }
 
+window.openInvitation = openInvitation;
+
 function moveButton(){
   const maxX = Math.max(0, buttonArea.clientWidth - noBtn.offsetWidth);
   const maxY = Math.max(0, buttonArea.clientHeight - noBtn.offsetHeight);
@@ -75,10 +78,12 @@ function saveRsvpBackup(entry){
   localStorage.setItem(RSVP_BACKUP_KEY, JSON.stringify(items));
 }
 
-function downloadRsvpBackup(){
+function downloadRsvpBackup(auto = false){
   const items = loadRsvpBackup();
   if (!items.length) {
-    alert('No RSVP backup has been saved in this browser yet.');
+    if (!auto) {
+      alert('No RSVP backup has been saved in this browser yet.');
+    }
     return;
   }
 
@@ -128,6 +133,8 @@ function confirmYes(event){
     response: 'YES',
     time: new Date().toLocaleString()
   });
+
+  downloadRsvpBackup(true);
 
   const payload = new URLSearchParams();
   payload.append('name', name);
@@ -217,9 +224,13 @@ guestName.addEventListener('input', updateYesButtonState);
 guestName.addEventListener('keydown', updateYesButtonState);
 
 guestName.addEventListener('change', updateYesButtonState);
-/*if (downloadRsvpBtn) {
-  downloadRsvpBtn.addEventListener('click', downloadRsvpBackup);*/
-/*}*/
+if (envelopeBtn) {
+  envelopeBtn.addEventListener('click', openInvitation);
+}
+
+if (downloadRsvpBtn) {
+  downloadRsvpBtn.addEventListener('click', () => downloadRsvpBackup(false));
+}
 
 updateYesButtonState();
 if (isLocalFile) {
