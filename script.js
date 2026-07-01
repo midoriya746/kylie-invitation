@@ -93,10 +93,11 @@ function updateResponseSummary(){
 }
 
 function confirmYes(event){
+  if (event && event.preventDefault) {
+    event.preventDefault();
+  }
+
   if (hasSubmitted) {
-    if (event && event.preventDefault) {
-      event.preventDefault();
-    }
     return;
   }
 
@@ -136,6 +137,23 @@ function confirmYes(event){
 
   updateResponseSummary();
   hasSubmitted = true;
+
+  const payload = JSON.stringify({
+    name,
+    guests: guestText,
+    response: 'YES'
+  });
+
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'text/plain'
+    },
+    body: payload
+  }).catch(err => {
+    console.warn('RSVP send failed', err);
+  });
 }
 
 function shareInvitation(){

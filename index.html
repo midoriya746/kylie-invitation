@@ -58,13 +58,12 @@
         </div>
       </div>
 
-      <form class="form" id="rsvpForm" novalidate action="https://script.google.com/macros/s/AKfycbwiEY3fn-Ab_ndv4UPRwE6iYQbeOJlr-cejiLjoyXxiNq8W5w40q1MzZTTM5bzJ90YJ/exec" target="submitFrame" method="post">
+      <form class="form" id="rsvpForm" novalidate>
         <input id="guestName" name="name" type="text" placeholder="Your name" aria-label="Guest name" required autocomplete="name">
         <select id="guestCount" name="guests" aria-label="Number of guests">
           <option value="1 Guest">1 Guest</option>
           <option value="2 Guests">2 Guests</option>
         </select>
-        <input type="hidden" name="response" value="YES">
 
         <p class="question">Will you attend?</p>
 
@@ -92,7 +91,6 @@
   </main>
 
   <div id="confettiLayer"></div>
-  <iframe name="submitFrame" style="display:none;"></iframe>
   <script src="script.js?v=4"></script>
 </body>
 </html>
