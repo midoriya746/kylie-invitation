@@ -109,9 +109,9 @@ a{
   top:0;
   left:0;
   right:0;
-  height:72px;
+  height:60px;
   background:linear-gradient(180deg, #ff92c4 0%, #e24c92 100%);
-  clip-path:polygon(0 0,100% 0,58% 100%);
+  clip-path:polygon(0 0,100% 0,60% 100%);
   transform-origin:top;
   transition:transform .9s ease;
   border-radius:34px 34px 0 0;
@@ -120,7 +120,7 @@ a{
 
 .letter{
   position:absolute;
-  top:72px;
+  top:60px;
   left:18px;
   right:18px;
   bottom:24px;
@@ -131,7 +131,7 @@ a{
   justify-content:center;
   align-items:center;
   text-align:center;
-  padding:24px;
+  padding:28px 22px 22px;
   transform:translateY(0);
   transition:transform .9s ease;
   z-index:1;
@@ -140,15 +140,14 @@ a{
 
 .letter h2{
   font-family:'Sacramento',cursive;
-  font-size:2.8rem;
+  font-size:3.4rem;
   color:#bd3c7e;
-  margin-bottom:4px;
+  margin:0 0 6px;
   line-height:1.05;
 }
 
 .letter .letter-heart{
-  font-size:2.4rem;
-  margin:4px 0 10px;
+  display:none;
 }
 
 .letter p{
@@ -448,6 +447,65 @@ button:disabled:hover{
   border:1px solid rgba(209, 95, 160, 0.18);
   color:#8f3f73;
   text-align:center;
+}
+
+.admin-panel{
+  margin-top:28px;
+  padding:22px;
+  border:1px solid rgba(184, 111, 155, 0.22);
+  background:linear-gradient(180deg, #fff7fb 0%, #f4eefb 100%);
+  border-radius:22px;
+}
+
+.admin-panel h3{
+  margin-bottom:12px;
+  color:#9b4f7b;
+}
+
+.admin-note{
+  margin-bottom:14px;
+  color:#7c4a6e;
+  font-size:0.95rem;
+  line-height:1.5;
+}
+
+.admin-summary{
+  margin-bottom:16px;
+  font-weight:700;
+  color:#6e3f6b;
+}
+
+.admin-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:16px;
+}
+
+.admin-table th,
+.admin-table td{
+  border:1px solid rgba(179, 112, 151, 0.16);
+  padding:10px 12px;
+  text-align:left;
+  font-size:0.95rem;
+}
+
+.admin-table th{
+  background:rgba(250, 232, 249, 0.9);
+  color:#7d3e73;
+}
+
+.admin-clear-btn{
+  width:100%;
+  max-width:220px;
+  background:#f9eef8;
+  color:#8f4f7d;
+  border:1px solid rgba(191, 108, 156, 0.32);
+  border-radius:999px;
+  padding:14px 22px;
+}
+
+.admin-clear-btn:hover{
+  background:#fff4fb;
 }
 
 #confettiLayer{

@@ -11,6 +11,10 @@ const guestName = document.getElementById('guestName');
 const guestCount = document.getElementById('guestCount');
 const qrImage = document.getElementById('qrImage');
 const shareUrl = document.getElementById('shareUrl');
+const adminPanel = document.getElementById('adminPanel');
+const adminTable = document.getElementById('adminTable');
+const adminCount = document.getElementById('adminCount');
+const clearAdminDataBtn = document.getElementById('clearAdminDataBtn');
 const rsvpForm = document.getElementById('rsvpForm');
 const buttonArea = document.querySelector('.button-area');
 const responseSummary = document.getElementById('responseSummary');
@@ -18,6 +22,7 @@ let hasSubmitted = false;
 console.log('script.js loaded');
 
 const RSVP_BACKUP_KEY = 'kylie7-rsvp-backup';
+const BACKEND_URL = '';
 
 const noMessages = [
   'NO 😅',
@@ -91,6 +96,49 @@ function updateResponseSummary(){
     : 'No RSVPs yet';
 }
 
+function isAdminMode(){
+  try {
+    return new URL(window.location.href).searchParams.get('admin') === '1';
+  } catch {
+    return false;
+  }
+}
+
+function renderAdminPanel(){
+  if (!adminPanel || !adminTable || !adminCount) return;
+  const items = loadRsvpBackup();
+  const tbody = adminTable.querySelector('tbody');
+  tbody.innerHTML = '';
+  adminCount.textContent = items.length;
+
+  if (!items.length) {
+    const row = document.createElement('tr');
+    row.innerHTML = '<td colspan="3">No saved RSVP entries yet.</td>';
+    tbody.appendChild(row);
+    return;
+  }
+
+  items.forEach(item => {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${item.name}</td><td>${item.guests}</td><td>${item.time}</td>`;
+    tbody.appendChild(row);
+  });
+}
+
+function showAdminPanel(){
+  if (!adminPanel) return;
+  if (isAdminMode()) {
+    adminPanel.hidden = false;
+    renderAdminPanel();
+  }
+}
+
+function clearAdminData(){
+  localStorage.removeItem(RSVP_BACKUP_KEY);
+  updateResponseSummary();
+  renderAdminPanel();
+}
+
 function confirmYes(event){
   if (event && event.preventDefault) {
     event.preventDefault();
@@ -112,12 +160,14 @@ function confirmYes(event){
 
   const guestText = guestCount.value || '1 Guest';
 
-  const saved = saveRsvpBackup({
+  const entry = {
     name,
     guests: guestText,
     response: 'YES',
     time: new Date().toLocaleString()
-  });
+  };
+
+  const saved = saveRsvpBackup(entry);
 
   if (!saved) {
     if (event && event.preventDefault) {
@@ -125,6 +175,10 @@ function confirmYes(event){
     }
     alert('This name has already RSVP-ed. Thank you!');
     return;
+  }
+
+  if (BACKEND_URL) {
+    sendRsvpToBackend(entry);
   }
 
   person.textContent = name;
@@ -136,6 +190,22 @@ function confirmYes(event){
 
   updateResponseSummary();
   hasSubmitted = true;
+}
+
+function sendRsvpToBackend(entry){
+  fetch(BACKEND_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(entry)
+  }).then(response => {
+    if (!response.ok) {
+      console.warn('RSVP backend save failed', response.status);
+    }
+  }).catch(error => {
+    console.warn('RSVP backend save error', error);
+  });
 }
 
 function shareInvitation(){
@@ -212,6 +282,9 @@ noBtn.addEventListener('touchstart', moveButton);
 if (rsvpForm) {
   rsvpForm.addEventListener('submit', confirmYes);
 }
+if (clearAdminDataBtn) {
+  clearAdminDataBtn.addEventListener('click', clearAdminData);
+}
 /* shareBtn.addEventListener('click', shareInvitation); */
 guestName.addEventListener('input', updateYesButtonState);
 guestName.addEventListener('keydown', updateYesButtonState);
@@ -225,6 +298,7 @@ updateYesButtonState();
 if (responseSummary) {
   updateResponseSummary();
 }
+showAdminPanel();
 if (isLocalFile) {
   const message = encodeURIComponent('Publish this invitation online first to generate a working QR code.');
   if (qrImage) {
