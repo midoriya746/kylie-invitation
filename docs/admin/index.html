@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RSVP Admin - Kylie's Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main class="admin-page">
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <p class="card-label">RSVP Admin</p>
+          <p class="card-value">Guest registrations saved locally in this browser</p>
+        </div>
+        <div class="card-number">Admin</div>
+      </div>
+
+      <div class="admin-panel" id="adminPanel">
+        <h3>Registration overview</h3>
+        <p class="admin-note">This page shows all RSVP entries stored in this browser.</p>
+        <div class="admin-summary">
+          <strong id="adminCount">0</strong> confirmed guest(s)
+        </div>
+        <table id="adminTable" class="admin-table">
+          <thead>
+            <tr><th>Name</th><th>Guests</th><th>Time</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button id="clearAdminDataBtn" type="button" class="admin-clear-btn">Clear stored RSVPs</button>
+      </div>
+    </section>
+  </main>
+  <script src="admin.js"></script>
+</body>
+</html>

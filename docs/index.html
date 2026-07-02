@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're invited to Kylie's 7th Birthday Celebration!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="envelopeScreen">
+    <div class="envelope" id="envelopeBtn" role="button" aria-label="Open invitation">
+      <div class="flap"></div>
+      <div class="letter">
+        <h2>You're Invited ❤️</h2>
+        <p>Tap to Open</p>
+      </div>
+      <div class="envelope-shadow"></div>
+    </div>
+  </div>
+
+  <main id="invitationContent">
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-copy">
+        <span class="small-title">YOU'RE INVITED TO A MAGICAL DAY</span>
+        <h1 class="name-title">Kylie's 7th Birthday Celebration!</h1>
+        <p class="hero-subtitle">A sweet birthday party full of sparkles, smiles, and fun</p>
+        <p class="hero-location">Bring your brightest smile and celebrate with Kylie</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-heading">
+        <div>
+          <p class="card-label">Dress Code</p>
+          <p class="card-value">💗 Pink - Blush • Baby Pink • Rose • Hot Pink</p>
+          <p class="card-value">💜 Purple - Lavender • Lilac • Violet • Plum</p>
+        </div>
+        <div class="card-number">7</div>
+      </div>
+
+      <div class="info-grid">
+        <div class="box">
+          <h3>When</h3>
+          <p>August 29 • 3:00 PM</p>
+        </div>
+        <div class="box">
+          <h3>Where</h3>
+          <a href="https://www.google.com/maps/place/Solarium+Private+Resort/@14.747414,120.529712,18.76z/data=!4m14!1m7!3m6!1s0x3396414e57255531:0x91214307941ab835!2sSolarium+Private+Resort!8m2!3d14.7475623!4d120.5302369!16s%2Fg%2F11fmbbr808!3m5!1s0x3396414e57255531:0x91214307941ab835!8m2!3d14.7475623!4d120.5302369!16s%2Fg%2F11fmbbr808?entry=ttu&g_ep=EgoyMDI2MDYxNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="text-decoration: none; color: #6a5acd; font-weight: 600;">
+            <p>📍Solarium Resort @ Mabatang, Abucay Bataan📍</p>
+          </a>
+        </div>
+      </div>
+
+      <form class="form" id="rsvpForm" novalidate>
+        <input id="guestName" name="name" type="text" placeholder="Your name" aria-label="Guest name" required autocomplete="name">
+        <select id="guestCount" name="guests" aria-label="Number of guests">
+          <option value="1 Guest">1 Guest</option>
+          <option value="2 Guests">2 Guests</option>
+        </select>
+
+        <p class="question">Will you attend?</p>
+
+        <div class="button-area">
+          <button id="yesBtn" type="submit" disabled>YES ❤️</button>
+          <button id="noBtn" type="button">NO 😅</button>
+        </div>
+
+        <div class="response-summary" id="responseSummary">No RSVPs yet</div>
+
+        <div class="qr-section">
+          <!--<p class="qr-title">Invitation</p>
+          <img id="qrImage" alt="QR code for invitation">
+          <p class="qr-note">Scan or share this link:<br><span id="shareUrl">Kylie's Birthday Invitation</span></p> -->
+        </div>
+
+        <div id="success" class="success">
+          <p>🎉 RSVP CONFIRMED 🎉</p>
+          <p><strong id="person">Guest</strong>, thank you for accepting!</p>
+          <p>Reserved Seats: <strong id="seats">1 Guest</strong></p>
+          <p>See you on August 29 ❤️</p>
+        </div>
+
+      </form>
+    </section>
+  </main>
+
+  <div id="confettiLayer"></div>
+  <script src="script.js?v=4"></script>
+</body>
+</html>
