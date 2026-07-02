@@ -109,9 +109,9 @@ a{
   top:0;
   left:0;
   right:0;
-  height:84px;
+  height:72px;
   background:linear-gradient(180deg, #ff92c4 0%, #e24c92 100%);
-  clip-path:polygon(0 0,100% 0,55% 100%);
+  clip-path:polygon(0 0,100% 0,58% 100%);
   transform-origin:top;
   transition:transform .9s ease;
   border-radius:34px 34px 0 0;
@@ -120,7 +120,7 @@ a{
 
 .letter{
   position:absolute;
-  top:84px;
+  top:72px;
   left:18px;
   right:18px;
   bottom:24px;
