@@ -109,7 +109,7 @@ a{
   top:0;
   left:0;
   right:0;
-  height:72px;
+  height:84px;
   background:linear-gradient(180deg, #ff92c4 0%, #e24c92 100%);
   clip-path:polygon(0 0,100% 0,55% 100%);
   transform-origin:top;
@@ -120,7 +120,7 @@ a{
 
 .letter{
   position:absolute;
-  top:64px;
+  top:84px;
   left:18px;
   right:18px;
   bottom:24px;
@@ -140,15 +140,15 @@ a{
 
 .letter h2{
   font-family:'Sacramento',cursive;
-  font-size:3.6rem;
+  font-size:2.8rem;
   color:#bd3c7e;
   margin-bottom:4px;
-  text-shadow:0 2px 8px rgba(255,255,255,0.8);
+  line-height:1.05;
 }
 
 .letter .letter-heart{
-  font-size:3.2rem;
-  margin:4px 0 8px;
+  font-size:2.4rem;
+  margin:4px 0 10px;
 }
 
 .letter p{
@@ -406,51 +406,6 @@ button:disabled:hover{
   font-weight:600;
 }
 
-.status-container{
-  display:grid;
-  gap:12px;
-  justify-items:center;
-  margin-bottom:18px;
-}
-
-.status-message{
-  width:100%;
-  max-width:420px;
-  padding:14px 18px;
-  background:linear-gradient(135deg, #fff7f9 0%, #f8edff 100%);
-  border:1px solid rgba(209, 123, 170, 0.18);
-  border-radius:18px;
-  color:#6f3d64;
-  text-align:center;
-  font-weight:600;
-  line-height:1.4;
-}
-
-.help-note{
-  max-width:420px;
-  color:#7b4c6a;
-  font-size:0.96rem;
-  text-align:center;
-  line-height:1.6;
-  padding:0 4px;
-}
-
-.secondary-btn{
-  width:100%;
-  max-width:220px;
-  background:#fff;
-  color:#a64789;
-  border:1px solid rgba(166, 71, 137, 0.25);
-  border-radius:999px;
-  padding:14px 22px;
-  transition:transform .25s ease, background .25s ease, border-color .25s ease;
-}
-
-.secondary-btn:hover{
-  transform:translateY(-1px);
-  background:rgba(255, 255, 255, 0.95);
-  border-color:rgba(166, 71, 137, 0.45);
-}
 
 .qr-section{
   margin-top:32px;
@@ -571,7 +526,6 @@ button:disabled:hover{
 
   #yesBtn,
   #shareBtn,
-  #downloadRsvpBtn,
   #noBtn{
     width:100%;
   }

@@ -11,8 +11,6 @@ const guestName = document.getElementById('guestName');
 const guestCount = document.getElementById('guestCount');
 const qrImage = document.getElementById('qrImage');
 const shareUrl = document.getElementById('shareUrl');
-const statusMessage = document.getElementById('statusMessage');
-const downloadRsvpBtn = document.getElementById('downloadRsvpBtn');
 const rsvpForm = document.getElementById('rsvpForm');
 const buttonArea = document.querySelector('.button-area');
 const responseSummary = document.getElementById('responseSummary');
@@ -125,7 +123,7 @@ function confirmYes(event){
     if (event && event.preventDefault) {
       event.preventDefault();
     }
-    setStatus('This name has already RSVP-ed. Thank you!');
+    alert('This name has already RSVP-ed. Thank you!');
     return;
   }
 
@@ -135,42 +133,9 @@ function confirmYes(event){
   yesBtn.textContent = 'THANK YOU ❤️';
   yesBtn.disabled = true;
   launchConfetti();
-  setStatus('Your RSVP is registered. You can download the guest list anytime.');
 
   updateResponseSummary();
-  updateDownloadButton();
   hasSubmitted = true;
-}
-
-function setStatus(message){
-  if (!statusMessage) return;
-  statusMessage.textContent = message;
-}
-
-function downloadRsvpData(){
-  const items = loadRsvpBackup();
-  if (!items.length) return;
-
-  const rows = [
-    ['Name','Guests','Response','Time'],
-    ...items.map(item => [item.name, item.guests, item.response, item.time])
-  ];
-  const csv = rows.map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(',')).join('\r\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'kylie-rsvp-list.csv';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-}
-
-function updateDownloadButton(){
-  if (!downloadRsvpBtn) return;
-  const items = loadRsvpBackup();
-  downloadRsvpBtn.hidden = items.length === 0;
 }
 
 function shareInvitation(){
@@ -247,9 +212,6 @@ noBtn.addEventListener('touchstart', moveButton);
 if (rsvpForm) {
   rsvpForm.addEventListener('submit', confirmYes);
 }
-if (downloadRsvpBtn) {
-  downloadRsvpBtn.addEventListener('click', downloadRsvpData);
-}
 /* shareBtn.addEventListener('click', shareInvitation); */
 guestName.addEventListener('input', updateYesButtonState);
 guestName.addEventListener('keydown', updateYesButtonState);
@@ -263,7 +225,6 @@ updateYesButtonState();
 if (responseSummary) {
   updateResponseSummary();
 }
-updateDownloadButton();
 if (isLocalFile) {
   const message = encodeURIComponent('Publish this invitation online first to generate a working QR code.');
   if (qrImage) {
